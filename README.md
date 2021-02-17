@@ -1,2 +1,2 @@
 # GamanCounterSendLogic
-別リポジトリのGamanCounterの送信ロジックです
+別リポジトリにある「GamanCounter」の送信ロジックです
