@@ -1,9 +1,7 @@
 package Repositories;
 
-import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -25,10 +23,10 @@ public class SaveReceiverUidRepository {
 
         Firestore db = FirestoreClient.getFirestore();
 
-        ApiFuture<WriteResult> future = db.collection("cheerMail")
+        // cheerMailコレクション配下のsendToコレクションにuidを送信先ユーザーのuidを保存
+        db.collection("cheerMail")
                 .document()
                 .collection("sendTo")
-                .document()
-                .set(uid);
+                .add(uid);
     }
 }

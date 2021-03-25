@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.util.List;
 
 public class GetCheerMailRepository {
-    public static List<String> getMessageInfo() throws IOException {
+    public static List<String> getMessageInfo() throws IOException, java.lang.InterruptedException, java.util.concurrent.ExecutionException {
         String projectId = "gamancounter-8546c";
+        String message = "";
+        String userName = "";
         List<String> resultList = null;
 
         // Cloud Firestore SDK 初期化
@@ -25,22 +27,20 @@ public class GetCheerMailRepository {
 
         Firestore db = FirestoreClient.getFirestore();
 
-        // TODO: messageidを追って適切なmessageとuserNameを取得する
+        // TODO: messageIdを追って適切なmessageとuserNameを取得する
+        String sampleMessageId = "sample_message_id";
         CollectionReference cheerMail = db.collection("cheerMail");
+        Query query = cheerMail.whereEqualTo("messageId", "sampleMessageId");
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
         for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-            random = document.getDouble("random");
-            token = document.getString("token");
-            uid = document.getString("uid");
+            message = document.getString("message");
+            userName = document.getString("userName");
         }
 
-        System.out.println("RANDOM: " + random);
-        System.out.println("TOKEN: " + token);
-        System.out.println("UID: " + uid);
+        resultList.add(message);
+        resultList.add(userName);
 
-        return token;
-
-
+        return resultList;
     }
 }
