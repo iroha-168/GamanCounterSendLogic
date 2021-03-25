@@ -7,13 +7,13 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    google() // Google's Maven repository
 }
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    implementation 'com.google.firebase:firebase-admin:7.1.0'
     implementation 'com.google.firebase:firebase-admin:7.1.0'
 }
 
