@@ -11,15 +11,15 @@ import java.io.IOException;
 public class SaveReceiverUidRepository {
     // 送り先のuidをsendTosサブコレクションに保存
     public static void saveUidInSendTo(String uid) throws IOException {
-        String projectId = "gamancounter-8546c";
+//        String projectId = "gamancounter-8546c";
 
-        // Cloud Firestore SDK 初期化
-        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(credentials)
-                .setProjectId(projectId)
-                .build();
-        FirebaseApp.initializeApp(options);
+//        // Cloud Firestore SDK 初期化
+//        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(credentials)
+//                .setProjectId(projectId)
+//                .build();
+//        FirebaseApp.initializeApp(options);
 
         Firestore db = FirestoreClient.getFirestore();
 

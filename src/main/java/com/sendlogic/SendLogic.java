@@ -1,5 +1,6 @@
 package com.sendlogic;
 
+import Infra.InitializeFirebaseSdk;
 import Repositories.GetCheerMailRepository;
 import Repositories.GetRegistrationTokenRepository;
 import Repositories.SaveReceiverUidRepository;
@@ -9,12 +10,17 @@ import com.google.cloud.functions.HttpResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-
+import java.io.BufferedWriter;
 import java.util.List;
+import java.util.logging.Logger;
 
-public class sendLogic implements HttpFunction {
+public class SendLogic implements HttpFunction {
+    private static final Logger logger = Logger.getLogger(SendLogic.class.getName());
+
     @Override
     public void service(HttpRequest request, HttpResponse response) throws Exception {
+        BufferedWriter writer = response.getWriter();
+        writer.write("start sendLogic\n");
 
         String token;
         String uid;
@@ -22,17 +28,24 @@ public class sendLogic implements HttpFunction {
         String messageContents;
         String condition = "'stock-GOOG' in topics || 'industry-tech' in topics";
 
+        InitializeFirebaseSdk.initializeSdk();
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepository();
         GetRegistrationTokenRepository getRegistrationTokenRepository = new GetRegistrationTokenRepository();
         SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepository();
 
+        writer.write("make instance\n");
+//        System.out.println("make instance\n");
+//        logger.info("make instance\n");
+
         // メッセージの送り先(受信者)のuidとtokenを取得
         // 送り先(受信者)のuidをSendToに登録
-        List<String> getTokenResults = getRegistrationTokenRepository.getToken();
+        List<String> getTokenResults = getRegistrationTokenRepository.getToken(response);
+        writer.write("after call getRegistrationTokenRepository\n");
+
         token = getTokenResults.get(0);
         uid = getTokenResults.get(1);
-        System.out.println("token: " + token);
-        System.out.println("uid: " + uid);
+        writer.write(token);
+        writer.write(uid);
         saveReceiverUidRepository.saveUidInSendTo(uid);
 
         // Android側で送られてきたメッセージIDを取得

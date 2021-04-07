@@ -23,6 +23,16 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Infra/InitializeFirebaseSdk.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/InitializeFirebaseSdk.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/Repositories/GetCheerMailRepository.java">
           <value>
             <PaintGroupHighlightMap />
@@ -39,6 +49,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/TestNotificationDataClass.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/sendlogic/SendLogic.java">
           <value>
             <PaintGroupHighlightMap />
           </value>
