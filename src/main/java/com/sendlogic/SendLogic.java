@@ -21,6 +21,7 @@ public class SendLogic implements HttpFunction {
     public void service(HttpRequest request, HttpResponse response) throws Exception {
         BufferedWriter writer = response.getWriter();
         writer.write("start sendLogic\n");
+        writer.write(response.toString());
 
         String token;
         String uid;
