@@ -21,7 +21,7 @@ public class SendLogic implements HttpFunction {
     public void service(HttpRequest request, HttpResponse response) throws Exception {
         BufferedWriter writer = response.getWriter();
         writer.write("start sendLogic\n");
-        writer.write(response.toString());
+        writer.write(response.toString() + "\n");
 
         String token;
         String uid;
@@ -45,8 +45,8 @@ public class SendLogic implements HttpFunction {
 
         token = getTokenResults.get(0);
         uid = getTokenResults.get(1);
-        writer.write(token);
-        writer.write(uid);
+        writer.write("token: " + token + "\n");
+        writer.write("uid: " + uid + "\n");
         saveReceiverUidRepository.saveUidInSendTo(uid);
 
         // Android側で送られてきたメッセージIDを取得
