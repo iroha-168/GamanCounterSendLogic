@@ -35,25 +35,25 @@ public class SendLogic implements HttpFunction {
         SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepository();
 
         writer.write("make instance\n");
-//        System.out.println("make instance\n");
-//        logger.info("make instance\n");
 
         // メッセージの送り先(受信者)のuidとtokenを取得
         // 送り先(受信者)のuidをSendToに登録
-        List<String> getTokenResults = getRegistrationTokenRepository.getToken(response);
+        List<String> getTokenResults = getRegistrationTokenRepository.getToken();
         writer.write("after call getRegistrationTokenRepository\n");
 
         token = getTokenResults.get(0);
         uid = getTokenResults.get(1);
         writer.write("token: " + token + "\n");
         writer.write("uid: " + uid + "\n");
-        saveReceiverUidRepository.saveUidInSendTo(uid);
 
         // Android側で送られてきたメッセージIDを取得
         var params = request.getQueryParameters();
         if (params.containsKey("messageId")) {
             String messageId = params.get("messageId").get(0);
-            System.out.println("messageId: " + messageId);
+            writer.write("messageId: " + messageId + "\n");
+
+            // 送信されてきたメッセージidと一致するドキュメントにSendToというサブコレクションを作成し、そこに送信先となるユーザのuidを登録する
+            saveReceiverUidRepository.saveUidInSendTo(response, messageId, uid);
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
             List<String> getMessageResults = getCheerMailRepository.getMessageInfo(messageId);

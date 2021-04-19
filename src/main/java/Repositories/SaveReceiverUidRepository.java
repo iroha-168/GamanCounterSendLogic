@@ -1,32 +1,26 @@
 package Repositories;
 
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
+import com.google.cloud.functions.HttpResponse;
 import com.google.firebase.cloud.FirestoreClient;
-
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class SaveReceiverUidRepository {
-    // 送り先のuidをsendTosサブコレクションに保存
-    public static void saveUidInSendTo(String uid) throws IOException {
-//        String projectId = "gamancounter-8546c";
-
-//        // Cloud Firestore SDK 初期化
-//        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-//        FirebaseOptions options = new FirebaseOptions.Builder()
-//                .setCredentials(credentials)
-//                .setProjectId(projectId)
-//                .build();
-//        FirebaseApp.initializeApp(options);
-
+    // TODO: 送信されてきたメッセージidと一致するドキュメントにSendToというサブコレクションを作成
+    // TODO: そこに送信先となるユーザのuidを登録
+    public static void saveUidInSendTo(HttpResponse response , String messageId, String uid) throws IOException {
+        BufferedWriter writer = response.getWriter();
         Firestore db = FirestoreClient.getFirestore();
 
-        // cheerMailコレクション配下のsendToコレクションにuidを送信先ユーザーのuidを保存
-        db.collection("cheerMail")
-                .document()
-                .collection("sendTo")
-                .add(uid);
+        // if--GETパラメータで渡されて来たmessageIdと等しいmessageIdをもつドキュメントを取得できたら(GetCheerMailRepositoryを利用する)
+            // then--SendToサブコレクションを作成し、そこに仮引数のuidを登録
+        // else--何かしらのエラーメッセージを返す？？
+
+
+//        db.collection("cheerMail")
+//                .document()
+//                .collection("sendTo")
+//                .add(uid);
     }
 }
