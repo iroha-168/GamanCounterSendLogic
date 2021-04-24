@@ -8,7 +8,7 @@ import java.util.List;
 
 public class GetCheerMailRepository {
     // messageIdを元にcheerMailコレクションからメッセージと送信者の名前を取得する
-    public static List<String> getMessageInfo(String messageId) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException {
+    public List<String> getMessageInfo(String messageId) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException {
 
         String message = "";
         String userName = "";
