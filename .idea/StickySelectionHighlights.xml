@@ -43,6 +43,11 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Repositories/GetTokenRepository.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/Repositories/GetTokenRepositoryImpl.java">
           <value>
             <PaintGroupHighlightMap />

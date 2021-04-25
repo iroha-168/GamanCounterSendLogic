@@ -2,6 +2,7 @@ package com.sendlogic;
 
 import Infra.InitializeFirebaseSdk;
 import Repositories.GetCheerMailRepository;
+import Repositories.GetTokenRepository;
 import Repositories.GetTokenRepositoryImpl;
 import Repositories.SaveReceiverUidRepository;
 import com.google.cloud.functions.HttpFunction;
@@ -30,15 +31,16 @@ public class SendLogic implements HttpFunction {
         String condition = "'stock-GOOG' in topics || 'industry-tech' in topics";
 
         InitializeFirebaseSdk.initializeSdk();
+
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepository();
-        GetTokenRepositoryImpl getTokenRepositoryImpl = new GetTokenRepositoryImpl();
+        GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
         SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepository();
 
         writer.write("make instance\n");
 
         // メッセージの送り先(受信者)のuidとtokenを取得
         // 送り先(受信者)のuidをSendToに登録
-        List<String> getTokenResults = getTokenRepositoryImpl.getToken();
+        List<String> getTokenResults = getTokenRepository.getToken();
         writer.write("after call getRegistrationTokenRepository\n");
 
         token = getTokenResults.get(0);

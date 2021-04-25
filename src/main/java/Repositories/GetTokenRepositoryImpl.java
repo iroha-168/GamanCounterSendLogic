@@ -8,29 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-interface GetTokenRepository {
-    // randomの最大値を取得する
-    public abstract Double getMax(CollectionReference testNotification);
-
-    // 取得した最大値を使ってドキュメントをランダムに取得する
-    public  abstract List<String> getDocumentAtRandom(CollectionReference testNotification, Double max);
-}
-
 public class GetTokenRepositoryImpl implements GetTokenRepository {
 
     // testNotificationコレクションから送り先のトークンを取得
-    public List<String> getToken() throws InterruptedException {
+    public List<String> getToken() {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference testNotification = db.collection("testNotification");
 
         GetTokenRepositoryImpl getTokenRepositoryImpl = new GetTokenRepositoryImpl();
         Double max = getTokenRepositoryImpl.getMax(testNotification);
         return getDocumentAtRandom(testNotification, max);
-
     }
 
-    // FIXME: get()使うとexception投げないとダメみたいやけどオーバーライドしたメソッドはexceptioon投げれない
-    @Override
     public Double getMax(CollectionReference testNotification) {
         Query query_max = testNotification
                 .orderBy("random", Query.Direction.DESCENDING)
@@ -42,6 +31,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             if (querySnapshotMax.get().getDocuments().iterator().hasNext()) {
                 max = querySnapshotMax.get().getDocuments().iterator().next().getDouble("random");
             }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -51,7 +41,6 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         return max;
     }
 
-    @Override
     public List<String> getDocumentAtRandom(CollectionReference testNotification, Double max) {
 
         String token = null;
@@ -65,14 +54,9 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
 
         ApiFuture<QuerySnapshot> future = query.get();
         List<QueryDocumentSnapshot> documents = null;
-        
+
         try {
             documents = future.get().getDocuments();
-
-            for (DocumentSnapshot document : documents) {
-                token = document.getString("token");
-                uid = document.getString("uid");
-            }
 
             if (documents.iterator().hasNext()) {
                 var document = documents.iterator().next();
