@@ -10,13 +10,12 @@ import java.util.concurrent.ExecutionException;
 
 public class GetTokenRepositoryImpl implements GetTokenRepository {
 
-    // testNotificationコレクションから送り先のトークンを取得
     public List<String> getToken() {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference testNotification = db.collection("testNotification");
 
-        GetTokenRepositoryImpl getTokenRepositoryImpl = new GetTokenRepositoryImpl();
-        Double max = getTokenRepositoryImpl.getMax(testNotification);
+        GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
+        Double max = getTokenRepository.getMax(testNotification);
         return getDocumentAtRandom(testNotification, max);
     }
 
