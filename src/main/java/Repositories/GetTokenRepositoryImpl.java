@@ -57,8 +57,8 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         }
 
         GetTokenRepositoryHelper helper = new GetTokenRepositoryHelper();
-        helper.token = token;
-        helper.uid = uid;
+        helper.setToken(token);
+        helper.setUid(uid);
         return helper;
     }
 }

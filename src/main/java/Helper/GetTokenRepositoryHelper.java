@@ -1,8 +1,8 @@
 package Helper;
 
 public class GetTokenRepositoryHelper {
-    public String token;
-    public String uid;
+    private String token;
+    private String uid;
 
     // ------ getter ------
     public String getToken() {
