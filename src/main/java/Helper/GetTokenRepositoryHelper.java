@@ -4,10 +4,19 @@ public class GetTokenRepositoryHelper {
     public String token;
     public String uid;
 
-    // コンストラクタ
-//    public GetTokenRepositoryHelper(String token, String uid) {
-//        this.token = token;
-//        this.uid = uid;
-//    }
+    // ------ getter ------
+    public String getToken() {
+        return token;
+    }
+    public String getUid() {
+        return uid;
+    }
 
+    // ------ setter ------
+    public void setToken(String token) {
+        this.token = token;
+    }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

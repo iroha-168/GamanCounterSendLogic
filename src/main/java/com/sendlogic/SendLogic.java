@@ -41,11 +41,11 @@ public class SendLogic implements HttpFunction {
 
         // メッセージの送り先(受信者)のuidとtokenを取得
         // 送り先(受信者)のuidをSendToに登録
-        GetTokenRepositoryHelper getTokenResults = getTokenRepository.getToken();
+        GetTokenRepositoryHelper getTokenRepositoryHelper = getTokenRepository.getToken();
         writer.write("after call getRegistrationTokenRepository\n");
 
-        token = getTokenResults.token;
-        uid = getTokenResults.uid;
+        token = getTokenRepositoryHelper.getToken();
+        uid = getTokenRepositoryHelper.getUid();
         writer.write("token: " + token + "\n");
         writer.write("uid: " + uid + "\n");
 
