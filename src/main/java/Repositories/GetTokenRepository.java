@@ -1,5 +1,6 @@
 package Repositories;
 
+import Helper.GetTokenRepositoryHelper;
 import com.google.cloud.firestore.CollectionReference;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    List<String> getToken() throws InterruptedException, ExecutionException;
+    GetTokenRepositoryHelper getToken() throws InterruptedException, ExecutionException;
 
     /**
      * getMax()は、randomの最大値を取得するためのメソッドです
@@ -34,5 +35,5 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    List<String> getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException;
+    GetTokenRepositoryHelper getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException;
 }

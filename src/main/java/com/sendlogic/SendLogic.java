@@ -1,5 +1,6 @@
 package com.sendlogic;
 
+import Helper.GetTokenRepositoryHelper;
 import Infra.InitializeFirebaseSdk;
 import Repositories.GetCheerMailRepository;
 import Repositories.GetTokenRepository;
@@ -40,11 +41,11 @@ public class SendLogic implements HttpFunction {
 
         // メッセージの送り先(受信者)のuidとtokenを取得
         // 送り先(受信者)のuidをSendToに登録
-        List<String> getTokenResults = getTokenRepository.getToken();
+        GetTokenRepositoryHelper getTokenResults = getTokenRepository.getToken();
         writer.write("after call getRegistrationTokenRepository\n");
 
-        token = getTokenResults.get(0);
-        uid = getTokenResults.get(1);
+        token = getTokenResults.token;
+        uid = getTokenResults.uid;
         writer.write("token: " + token + "\n");
         writer.write("uid: " + uid + "\n");
 

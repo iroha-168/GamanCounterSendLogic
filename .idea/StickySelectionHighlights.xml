@@ -23,6 +23,11 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Helper/GetTokenRepositoryHelper.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/Infra/InitializeFirebaseSdk.java">
           <value>
             <PaintGroupHighlightMap />
