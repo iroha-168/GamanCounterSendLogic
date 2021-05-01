@@ -1,34 +1,31 @@
 package Repositories;
 
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
+import Helper.GetCheerMailRepositoryHelper;
+import com.google.cloud.firestore.CollectionReference;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class GetCheerMailRepository {
-    // messageIdを元にcheerMailコレクションからメッセージと送信者の名前を取得する
-    public List<String> getMessageInfo(String messageId) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException {
+public interface GetCheerMailRepository {
+    /**
+     * getMessageAndName()は、get()で取得した名前とメッセージ内容を呼び出し元に返すメソッドです
+     *
+     * @param messageId
+     * @return get()の結果であるmessageとuserName
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
+    GetCheerMailRepositoryHelper getMessageAndName(String messageId) throws InterruptedException, ExecutionException;
 
-        String message = "";
-        String userName = "";
-        List<String> resultList = null;
+    /**
+     * get()は、getMessageAndName()で渡されてきた引数を元に、実際にfirestoreにデータを取得しにいくメソッドです。
+     *
+     * @param messageId
+     * @param cheerMail: cheerMailコレクションのリファレンス
+     * @return 取得したmessageとuserName
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
+    GetCheerMailRepositoryHelper getCheerMail(String messageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException;
 
-        Firestore db = FirestoreClient.getFirestore();
-
-        // messageIdを追って適切なmessageとuserNameを取得する
-        CollectionReference cheerMail = db.collection("cheerMail");
-        Query query = cheerMail.whereEqualTo("messageId", messageId);
-        ApiFuture<QuerySnapshot> querySnapshot = query.get();
-
-        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-            message = document.getString("message");
-            userName = document.getString("userName");
-        }
-
-        resultList.add(0, message);
-        resultList.add(1, userName);
-
-        return resultList;
-    }
 }

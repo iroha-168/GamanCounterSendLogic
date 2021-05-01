@@ -3,7 +3,6 @@ package Repositories;
 import Helper.GetTokenRepositoryHelper;
 import com.google.cloud.firestore.CollectionReference;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public interface GetTokenRepository {
@@ -19,7 +18,7 @@ public interface GetTokenRepository {
     /**
      * getMax()は、randomの最大値を取得するためのメソッドです
      *
-     * @param testNotification testNotificationコレクションのリファレンス
+     * @param testNotification: testNotificationコレクションのリファレンス
      * @return randomフィールドの最大値
      * @throws InterruptedException
      * @throws ExecutionException

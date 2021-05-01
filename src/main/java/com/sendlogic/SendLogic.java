@@ -1,23 +1,19 @@
 package com.sendlogic;
 
+import Helper.GetCheerMailRepositoryHelper;
 import Helper.GetTokenRepositoryHelper;
 import Infra.InitializeFirebaseSdk;
-import Repositories.GetCheerMailRepository;
-import Repositories.GetTokenRepository;
-import Repositories.GetTokenRepositoryImpl;
-import Repositories.SaveReceiverUidRepository;
+import Repositories.*;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+
 import java.io.BufferedWriter;
-import java.util.List;
-import java.util.logging.Logger;
 
 public class SendLogic implements HttpFunction {
-    private static final Logger logger = Logger.getLogger(SendLogic.class.getName());
 
     @Override
     public void service(HttpRequest request, HttpResponse response) throws Exception {
@@ -33,7 +29,7 @@ public class SendLogic implements HttpFunction {
 
         InitializeFirebaseSdk.initializeSdk();
 
-        GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepository();
+        GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
         GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
         SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepository();
 
@@ -59,9 +55,9 @@ public class SendLogic implements HttpFunction {
             saveReceiverUidRepository.saveUidInSendTo(response, messageId, uid);
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
-            List<String> getMessageResults = getCheerMailRepository.getMessageInfo(messageId);
-            messageContents = getMessageResults.get(0);
-            userName = getMessageResults.get(1);
+            GetCheerMailRepositoryHelper getCheerMailRepositoryHelper = getCheerMailRepository.getMessageAndName(messageId);
+            messageContents = getCheerMailRepositoryHelper.getMessage();
+            userName = getCheerMailRepositoryHelper.getUserName();
             System.out.println("messageContents: " + messageContents);
             System.out.println("userName: " + userName);
 

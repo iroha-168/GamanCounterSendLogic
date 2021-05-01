@@ -13,13 +13,9 @@ public class SaveReceiverUidRepository {
         BufferedWriter writer = response.getWriter();
         Firestore db = FirestoreClient.getFirestore();
 
-        // if--GETパラメータで渡されて来たmessageIdと等しいmessageIdをもつドキュメントを取得できたら(GetCheerMailRepositoryを利用する)
-            // then--SendToサブコレクションを作成し、そこに仮引数のuidを登録
-        // else--何かしらのエラーメッセージを返す？？
+        // TODO: if--GETパラメータで渡されて来たmessageIdと等しいmessageIdをもつドキュメントを取得できたら(GetCheerMailRepositoryを利用する)
+            // TODO: then--SendToサブコレクションを作成し、そこに仮引数のuidを登録
+        // TODO: else--何かしらのエラーメッセージを返す？？
 
-//        db.collection("cheerMail")
-//                .document()
-//                .collection("sendTo")
-//                .add(uid);
     }
 }
