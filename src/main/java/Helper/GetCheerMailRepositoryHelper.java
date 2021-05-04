@@ -1,8 +1,11 @@
 package Helper;
 
+import com.google.cloud.firestore.DocumentSnapshot;
+
 public class GetCheerMailRepositoryHelper {
     private String message;
     private String userName;
+    private String documentId;
 
     // ------ getter ------
     public String getMessage() {
@@ -11,6 +14,7 @@ public class GetCheerMailRepositoryHelper {
     public String getUserName() {
         return userName;
     }
+    public String getDocumentId() { return documentId; }
 
     // ------ setter ------
     public void setMessage(String message) {
@@ -18,5 +22,8 @@ public class GetCheerMailRepositoryHelper {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }

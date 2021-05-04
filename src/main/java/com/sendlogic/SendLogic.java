@@ -31,7 +31,7 @@ public class SendLogic implements HttpFunction {
 
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
         GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
-        SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepository();
+        SaveReceiverUidRepositoryImpl saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
 
         writer.write("make instance\n");
 
@@ -52,7 +52,8 @@ public class SendLogic implements HttpFunction {
             writer.write("messageId: " + messageId + "\n");
 
             // 送信されてきたメッセージidと一致するドキュメントにSendToというサブコレクションを作成し、そこに送信先となるユーザのuidを登録する
-            saveReceiverUidRepository.saveUidInSendTo(response, messageId, uid);
+            // TODO: デバッグ終わったらresponseを消す
+            saveReceiverUidRepository.saveUidInSendTo(messageId, uid);
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
             GetCheerMailRepositoryHelper getCheerMailRepositoryHelper = getCheerMailRepository.getMessageAndName(messageId);

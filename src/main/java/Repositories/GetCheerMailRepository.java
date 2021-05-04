@@ -11,7 +11,7 @@ public interface GetCheerMailRepository {
      * getMessageAndName()は、get()で取得した名前とメッセージ内容を呼び出し元に返すメソッドです
      *
      * @param messageId
-     * @return get()の結果であるmessageとuserName
+     * @return get()の結果であるmessageとuserNameとdocumentId
      * @throws InterruptedException
      * @throws ExecutionException
      */
@@ -22,7 +22,7 @@ public interface GetCheerMailRepository {
      *
      * @param messageId
      * @param cheerMail: cheerMailコレクションのリファレンス
-     * @return 取得したmessageとuserName
+     * @return 取得したmessageとuserNameとdocumentId
      * @throws InterruptedException
      * @throws ExecutionException
      */
