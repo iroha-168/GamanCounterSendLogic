@@ -12,6 +12,8 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
+import java.net.ConnectException;
 
 public class SendLogic implements HttpFunction {
 
@@ -36,7 +38,6 @@ public class SendLogic implements HttpFunction {
         writer.write("make instance\n");
 
         // メッセージの送り先(受信者)のuidとtokenを取得
-        // 送り先(受信者)のuidをSendToに登録
         GetTokenRepositoryHelper getTokenRepositoryHelper = getTokenRepository.getToken();
         writer.write("after call getRegistrationTokenRepository\n");
 
@@ -51,9 +52,19 @@ public class SendLogic implements HttpFunction {
             String messageId = params.get("messageId").get(0);
             writer.write("messageId: " + messageId + "\n");
 
-            // 送信されてきたメッセージidと一致するドキュメントにSendToというサブコレクションを作成し、そこに送信先となるユーザのuidを登録する
-            // TODO: デバッグ終わったらresponseを消す
-            saveReceiverUidRepository.saveUidInSendTo(messageId, uid);
+            // 送信されてきたメッセージidと一致するドキュメントにSendToというサブコレクションを作成
+            // そこに、メッセージの送信先ユーザのuidを登録
+            // TODO: 例外処理
+            try {
+                saveReceiverUidRepository.saveUidInSendTo(messageId, uid);
+            } catch (NullPointerException e) {
+                // if (messageIdを取得できなかった) -> E_001
+                // else if (uidを取得できなかった) -> E_002
+
+            } catch (Exception e) {
+                // if (引数のmessageIdと一致するドキュメントが見つからなかった) -> E_003
+                // if (Firebaseがダウンしていた) -> E_004
+            }
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
             GetCheerMailRepositoryHelper getCheerMailRepositoryHelper = getCheerMailRepository.getMessageAndName(messageId);
