@@ -83,6 +83,11 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/UseCases/CheckDocumentExist.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/sendlogic/SendLogic.java">
           <value>
             <PaintGroupHighlightMap />

@@ -57,13 +57,13 @@ public class SendLogic implements HttpFunction {
             // TODO: 例外処理
             try {
                 saveReceiverUidRepository.saveUidInSendTo(messageId, uid);
+                // return E_OK
             } catch (NullPointerException e) {
-                // if (messageIdを取得できなかった) -> E_001
-                // else if (uidを取得できなかった) -> E_002
-
+                // if (messageIdを取得できなかった) -> return E_001
+                // else if (uidを取得できなかった) -> return E_002
             } catch (Exception e) {
-                // if (引数のmessageIdと一致するドキュメントが見つからなかった) -> E_003
-                // if (Firebaseがダウンしていた) -> E_004
+                // if (引数のmessageIdと一致するドキュメントが見つからなかった) -> return E_003
+                // if (Firebaseがダウンしていた) -> return E_004
             }
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
