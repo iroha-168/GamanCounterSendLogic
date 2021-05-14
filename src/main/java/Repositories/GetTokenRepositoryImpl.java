@@ -1,6 +1,6 @@
 package Repositories;
 
-import Helper.GetTokenRepositoryHelper;
+import Entities.GetTokenRepositoryEntity;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GetTokenRepositoryImpl implements GetTokenRepository {
 
-    public GetTokenRepositoryHelper getToken() throws InterruptedException, ExecutionException {
+    public GetTokenRepositoryEntity getToken() throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference testNotification = db.collection("testNotification");
 
@@ -34,7 +34,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         return max;
     }
 
-    public GetTokenRepositoryHelper getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException {
+    public GetTokenRepositoryEntity getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException {
 
         String token = null;
         String uid = null;
@@ -55,7 +55,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             uid = document.getString("uid");
         }
 
-        GetTokenRepositoryHelper helper = new GetTokenRepositoryHelper();
+        GetTokenRepositoryEntity helper = new GetTokenRepositoryEntity();
         helper.setToken(token);
         helper.setUid(uid);
         return helper;

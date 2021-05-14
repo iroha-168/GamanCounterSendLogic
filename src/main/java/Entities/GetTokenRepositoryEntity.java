@@ -1,6 +1,6 @@
-package Helper;
+package Entities;
 
-public class GetTokenRepositoryHelper {
+public class GetTokenRepositoryEntity {
     private String token;
     private String uid;
 

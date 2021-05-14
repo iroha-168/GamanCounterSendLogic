@@ -23,6 +23,16 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Entities/GetCheerMailRepositoryEntity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Entities/GetTokenRepositoryEntity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/Helper/GetCheerMailRepositoryHelper.java">
           <value>
             <PaintGroupHighlightMap />

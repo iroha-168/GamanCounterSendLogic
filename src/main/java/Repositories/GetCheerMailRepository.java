@@ -1,9 +1,8 @@
 package Repositories;
 
-import Helper.GetCheerMailRepositoryHelper;
+import Entities.GetCheerMailRepositoryEntity;
 import com.google.cloud.firestore.CollectionReference;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public interface GetCheerMailRepository {
@@ -15,7 +14,7 @@ public interface GetCheerMailRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    GetCheerMailRepositoryHelper getMessageAndName(String messageId) throws InterruptedException, ExecutionException;
+    GetCheerMailRepositoryEntity getMessageAndName(String messageId) throws InterruptedException, ExecutionException;
 
     /**
      * get()は、getMessageAndName()で渡されてきた引数を元に、実際にfirestoreにデータを取得しにいくメソッドです。
@@ -26,6 +25,6 @@ public interface GetCheerMailRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    GetCheerMailRepositoryHelper getCheerMail(String messageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException;
+    GetCheerMailRepositoryEntity getCheerMail(String messageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException;
 
 }

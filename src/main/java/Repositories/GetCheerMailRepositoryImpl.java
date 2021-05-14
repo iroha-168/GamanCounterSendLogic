@@ -1,6 +1,6 @@
 package Repositories;
 
-import Helper.GetCheerMailRepositoryHelper;
+import Entities.GetCheerMailRepositoryEntity;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GetCheerMailRepositoryImpl implements GetCheerMailRepository {
     // messageIdを元にcheerMailコレクションからメッセージと送信者の名前を取得する
-    public GetCheerMailRepositoryHelper getMessageAndName(String messageId) throws InterruptedException, ExecutionException {
+    public GetCheerMailRepositoryEntity getMessageAndName(String messageId) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference cheerMail = db.collection("cheerMail");
 
@@ -17,7 +17,7 @@ public class GetCheerMailRepositoryImpl implements GetCheerMailRepository {
         return getCheerMailRepository.getCheerMail(messageId, cheerMail);
     }
 
-    public GetCheerMailRepositoryHelper getCheerMail(String massageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException {
+    public GetCheerMailRepositoryEntity getCheerMail(String massageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException {
         String message = "";
         String userName = "";
         String documentId = "";
@@ -32,7 +32,7 @@ public class GetCheerMailRepositoryImpl implements GetCheerMailRepository {
             documentId = document.getId();
         }
 
-        GetCheerMailRepositoryHelper helper = new GetCheerMailRepositoryHelper();
+        GetCheerMailRepositoryEntity helper = new GetCheerMailRepositoryEntity();
         helper.setMessage(message);
         helper.setUserName(userName);
         helper.setDocumentId(documentId);

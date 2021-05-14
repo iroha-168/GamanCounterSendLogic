@@ -1,8 +1,6 @@
-package Helper;
+package Entities;
 
-import com.google.cloud.firestore.DocumentSnapshot;
-
-public class GetCheerMailRepositoryHelper {
+public class GetCheerMailRepositoryEntity {
     private String message;
     private String userName;
     private String documentId;
