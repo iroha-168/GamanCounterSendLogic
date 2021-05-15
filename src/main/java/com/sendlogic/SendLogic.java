@@ -3,7 +3,10 @@ package com.sendlogic;
 import Entities.GetCheerMailRepositoryEntity;
 import Entities.GetTokenRepositoryEntity;
 import Infra.InitializeFirebaseSdk;
-import Repositories.*;
+import Repositories.GetCheerMailRepository;
+import Repositories.GetCheerMailRepositoryImpl;
+import Repositories.GetTokenRepository;
+import Repositories.GetTokenRepositoryImpl;
 import UseCases.CheckDocumentExist;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
@@ -11,6 +14,8 @@ import com.google.cloud.functions.HttpResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 
@@ -19,8 +24,7 @@ public class SendLogic implements HttpFunction {
     @Override
     public void service(HttpRequest request, HttpResponse response) throws Exception {
         BufferedWriter writer = response.getWriter();
-        writer.write("start sendLogic\n");
-        writer.write(response.toString() + "\n");
+        Logger logger = LoggerFactory.getLogger(SendLogic.class);
 
         String token;
         String uid;
@@ -32,30 +36,31 @@ public class SendLogic implements HttpFunction {
 
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
         GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
-//        SaveReceiverUidRepositoryImpl saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
         CheckDocumentExist checkDocumentExist = new CheckDocumentExist();
 
-        writer.write("make instance\n");
+        logger.debug("make instance\n");
 
         // メッセージの送り先(受信者)のuidとtokenを取得
-        // TODO: uidを取得できなかったときのヴァリデーション
         GetTokenRepositoryEntity getTokenRepositoryEntity = getTokenRepository.getToken();
-        writer.write("after call getRegistrationTokenRepository\n");
+        logger.debug("after call getRegistrationTokenRepository\n");
 
         token = getTokenRepositoryEntity.getToken();
         uid = getTokenRepositoryEntity.getUid();
-        writer.write("token: " + token + "\n");
-        writer.write("uid: " + uid + "\n");
+        logger.debug("token: " + token + "\n");
+        logger.debug("uid: " + uid + "\n");
+
+        // uidを取得できなかったときのヴァリデーション
+        if (uid == null) {
+            writer.write("E_001");
+        }
 
         // Android側で送られてきたメッセージIDを取得
-        // TODO: messageIdが取得できなかったときのためのヴァリデーション
         var params = request.getQueryParameters();
         if (params.containsKey("messageId")) {
             String messageId = params.get("messageId").get(0);
-            writer.write("messageId: " + messageId + "\n");
 
-            // messageIdが取得できたこのタイミングでUseCaseのcheck()を呼び出す
-            checkDocumentExist.check(messageId, uid);
+            // messageIdが取得できなかったときのためのヴァリデーション
+            checkDocumentExist.check(response, messageId, uid);
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
             GetCheerMailRepositoryEntity getCheerMailRepositoryEntity = getCheerMailRepository.getMessageAndName(messageId);
