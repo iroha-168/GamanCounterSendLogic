@@ -1,6 +1,7 @@
 package UseCases;
 
 import Entities.GetCheerMailRepositoryEntity;
+import Entities.ReturnErrorCodeEntity;
 import Repositories.GetCheerMailRepository;
 import Repositories.GetCheerMailRepositoryImpl;
 import Repositories.SaveReceiverUidRepositoryImpl;
@@ -12,18 +13,23 @@ import java.util.concurrent.ExecutionException;
 
 public class CheckDocumentExist {
     // 送信されてきたメッセージidと一致するドキュメントにsendToというサブコレクションを作成
-    public void check(HttpResponse response, String messageId, String uid) throws InterruptedException, ExecutionException, IOException {
+    public String check(String messageId, String uid) throws InterruptedException, ExecutionException, IOException {
         SaveReceiverUidRepositoryImpl saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
+
         GetCheerMailRepositoryEntity result = getCheerMailRepository.getMessageAndName(messageId);
 
-        BufferedWriter writer = response.getWriter();
-
         if (result != null) {
+            // messageIdと一致するドキュメントが存在した場合
+            // そのドキュメントにuidを登録
             String documentId = result.getDocumentId();
             saveReceiverUidRepository.saveUidInSendTo(documentId, uid);
         } else {
-            writer.write("E_002");
+            // messageIdと一致するドキュメントが存在しなかった場合
+            ReturnErrorCodeEntity returnErrorCodeEntity = new ReturnErrorCodeEntity();
+            String errorCode = returnErrorCodeEntity.ReturnErrorCode("cannot find document");
+            return errorCode;
         }
+        return null;
     }
 }

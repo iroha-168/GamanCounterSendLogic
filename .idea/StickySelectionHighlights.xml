@@ -33,6 +33,16 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Entities/ReturnErrorCode.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/Entities/ReturnErrorCodeEntity.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/Helper/GetCheerMailRepositoryHelper.java">
           <value>
             <PaintGroupHighlightMap />

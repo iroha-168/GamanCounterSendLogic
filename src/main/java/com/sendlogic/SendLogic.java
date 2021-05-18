@@ -60,7 +60,11 @@ public class SendLogic implements HttpFunction {
             String messageId = params.get("messageId").get(0);
 
             // messageIdが取得できなかったときのためのヴァリデーション
-            checkDocumentExist.check(response, messageId, uid);
+            String errorCode = checkDocumentExist.check(messageId, uid);
+            if (errorCode != null) {
+                // messageIdが取得できなかった場合はエラーコードをAndroidに返す
+                writer.write(errorCode);
+            }
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
             GetCheerMailRepositoryEntity getCheerMailRepositoryEntity = getCheerMailRepository.getMessageAndName(messageId);
