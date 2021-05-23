@@ -8,16 +8,16 @@ import com.google.firebase.cloud.FirestoreClient;
 import java.util.concurrent.ExecutionException;
 
 public class GetCheerMailRepositoryImpl implements GetCheerMailRepository {
-    // messageIdを元にcheerMailコレクションからメッセージと送信者の名前を取得する
-    public GetCheerMailRepositoryEntity getMessageAndName(String messageId) throws InterruptedException, ExecutionException {
+    // 引数のmessageIdと一致するメッセージ、送信者の名前、またそれらが登録されているドキュメントのIDを取得
+    public GetCheerMailRepositoryEntity getCheerMail(String messageId) throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference cheerMail = db.collection("cheerMail");
 
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
-        return getCheerMailRepository.getCheerMail(messageId, cheerMail);
+        return getCheerMailRepository.getMessageNameDocumentId(messageId, cheerMail);
     }
 
-    public GetCheerMailRepositoryEntity getCheerMail(String massageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException {
+    public GetCheerMailRepositoryEntity getMessageNameDocumentId(String massageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException {
         String message = "";
         String userName = "";
         String documentId = "";

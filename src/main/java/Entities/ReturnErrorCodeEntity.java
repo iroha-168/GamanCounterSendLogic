@@ -2,8 +2,8 @@ package Entities;
 
 public class ReturnErrorCodeEntity {
     public String ReturnErrorCode(String errorMsg) {
-        switch(errorMsg) {
-            case "cannot get uid":
+        switch (errorMsg) {
+            case "cannot get token and uid":
                 return "E_001";
 
             case "cannot get messageId":

@@ -3,11 +3,10 @@ package com.sendlogic;
 import Entities.GetCheerMailRepositoryEntity;
 import Entities.GetTokenRepositoryEntity;
 import Infra.InitializeFirebaseSdk;
-import Repositories.GetCheerMailRepository;
-import Repositories.GetCheerMailRepositoryImpl;
-import Repositories.GetTokenRepository;
-import Repositories.GetTokenRepositoryImpl;
-import UseCases.CheckDocumentExist;
+import Repositories.*;
+import UseCases.CheckIfDocumentExists;
+import UseCases.CheckIfMessageIdExists;
+import UseCases.CheckIfTokenAndUidExist;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
@@ -34,44 +33,71 @@ public class SendLogic implements HttpFunction {
 
         InitializeFirebaseSdk.initializeSdk();
 
+        // インスタンス化
+        GetCheerMailRepositoryEntity getCheerMailRepositoryEntity = new GetCheerMailRepositoryEntity();
+
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
         GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
-        CheckDocumentExist checkDocumentExist = new CheckDocumentExist();
+        SaveReceiverUidRepositoryImpl saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
 
-        logger.debug("make instance\n");
+        CheckIfDocumentExists checkIfDocumentExists = new CheckIfDocumentExists();
+        CheckIfTokenAndUidExist checkIfTokenAndUidExist = new CheckIfTokenAndUidExist();
+        CheckIfMessageIdExists checkIfMessageIdExists = new CheckIfMessageIdExists();
+
 
         // メッセージの送り先(受信者)のuidとtokenを取得
-        GetTokenRepositoryEntity getTokenRepositoryEntity = getTokenRepository.getToken();
-        logger.debug("after call getRegistrationTokenRepository\n");
+        GetTokenRepositoryEntity tokenAndUid = getTokenRepository.getToken();
+        logger.debug("after call getRegistrationTokenRepository");
 
-        token = getTokenRepositoryEntity.getToken();
-        uid = getTokenRepositoryEntity.getUid();
-        logger.debug("token: " + token + "\n");
-        logger.debug("uid: " + uid + "\n");
-
-        // uidを取得できなかったときのヴァリデーション
-        if (uid == null) {
-            writer.write("E_001");
+        // TODO: uidとtokenを取得できなかったときのヴァリデーションを呼び出す
+        String tokenAndUidExistState = checkIfTokenAndUidExist.check(tokenAndUid);
+        if (tokenAndUidExistState != "E_OK") {
+            // tokenとuidが取得できなかった場合
+            // エラーコードをAndroidに返す
+            writer.write(tokenAndUidExistState);
+            return;
         }
+        token = tokenAndUid.getToken();
+        uid = tokenAndUid.getUid();
+        logger.debug("token: " + token);
+        logger.debug("uid: " + uid);
+
 
         // Android側で送られてきたメッセージIDを取得
         var params = request.getQueryParameters();
         if (params.containsKey("messageId")) {
             String messageId = params.get("messageId").get(0);
 
-            // messageIdが取得できなかったときのためのヴァリデーション
-            String errorCode = checkDocumentExist.check(messageId, uid);
-            if (errorCode != null) {
-                // messageIdが取得できなかった場合はエラーコードをAndroidに返す
-                writer.write(errorCode);
+            // TODO: messageIdが取得できなかったときヴァリデーションを呼び出す
+            String messageIdExistState = checkIfMessageIdExists.check(messageId);
+            if (messageIdExistState != "E_OK") {
+                // messageIdが取得できなかった場合
+                // エラーコードをAndroidに返す
+                writer.write(messageIdExistState);
+                return;
             }
+            logger.debug("messageId: " + messageId);
+
+
+            // TODO: messageIdと一致するドキュメントを取得できなかった場合のヴァリデーションを呼び出す
+            GetCheerMailRepositoryEntity cheerMailDocument = getCheerMailRepository.getCheerMail(messageId);
+            String documentExistState = checkIfDocumentExists.check(cheerMailDocument);
+            if (documentExistState != "E_OK") {
+                // messageIdと一致するドキュメントが取得できなかった場合
+                // エラーコードをAndroidに返す
+                writer.write(documentExistState);
+                return;
+            }
+            // messageIdと一致するドキュメントが取得できた場合はdocumentIdとuid(受信者)をfirestoreに登録
+            String documentId = cheerMailDocument.getDocumentId();
+            saveReceiverUidRepository.saveUidInSendTo(documentId, uid);
+
 
             // メッセージIDを追って送信すべきメッセージと送信者の名前を取得
-            GetCheerMailRepositoryEntity getCheerMailRepositoryEntity = getCheerMailRepository.getMessageAndName(messageId);
             messageContents = getCheerMailRepositoryEntity.getMessage();
             userName = getCheerMailRepositoryEntity.getUserName();
-            System.out.println("messageContents: " + messageContents);
-            System.out.println("userName: " + userName);
+            logger.debug("messageContents: " + messageContents);
+            logger.debug("userName: " + userName);
 
             // 特定のデバイスにメッセージを送信する(プッシュ通知)
             String registrationToken = token;
@@ -86,7 +112,7 @@ public class SendLogic implements HttpFunction {
                     .build();
 
             String task = FirebaseMessaging.getInstance().send(message);
-            System.out.println("Successfully sent message: " + task);
+            logger.debug("Successfully sent message: " + task);
         }
     }
 }

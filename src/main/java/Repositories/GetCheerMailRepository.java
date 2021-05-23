@@ -14,7 +14,7 @@ public interface GetCheerMailRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    GetCheerMailRepositoryEntity getMessageAndName(String messageId) throws InterruptedException, ExecutionException;
+    GetCheerMailRepositoryEntity getCheerMail(String messageId) throws InterruptedException, ExecutionException;
 
     /**
      * get()は、getMessageAndName()で渡されてきた引数を元に、実際にfirestoreにデータを取得しにいくメソッドです。
@@ -25,6 +25,6 @@ public interface GetCheerMailRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    GetCheerMailRepositoryEntity getCheerMail(String messageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException;
+    GetCheerMailRepositoryEntity getMessageNameDocumentId(String messageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException;
 
 }
