@@ -13,8 +13,7 @@ public class GetCheerMailRepositoryImpl implements GetCheerMailRepository {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference cheerMail = db.collection("cheerMail");
 
-        GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
-        return getCheerMailRepository.getMessageNameDocumentId(messageId, cheerMail);
+        return getMessageNameDocumentId(messageId, cheerMail);
     }
 
     public GetCheerMailRepositoryEntity getMessageNameDocumentId(String massageId, CollectionReference cheerMail) throws InterruptedException, ExecutionException {

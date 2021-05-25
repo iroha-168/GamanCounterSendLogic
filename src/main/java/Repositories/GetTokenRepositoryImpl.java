@@ -14,8 +14,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference testNotification = db.collection("testNotification");
 
-        GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
-        Double max = getTokenRepository.getMax(testNotification);
+        Double max = getMax(testNotification);
         return getRandomUserToken(testNotification, max);
     }
 

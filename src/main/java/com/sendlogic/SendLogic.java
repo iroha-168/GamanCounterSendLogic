@@ -51,7 +51,7 @@ public class SendLogic implements HttpFunction {
 
         // TODO: uidとtokenを取得できなかったときのヴァリデーションを呼び出す
         String tokenAndUidExistState = checkIfTokenAndUidExist.check(tokenAndUid);
-        if (tokenAndUidExistState != "E_OK") {
+        if (!tokenAndUidExistState.equals("E_OK")) {
             // tokenとuidが取得できなかった場合
             // エラーコードをAndroidに返す
             writer.write(tokenAndUidExistState);
@@ -70,7 +70,7 @@ public class SendLogic implements HttpFunction {
 
             // TODO: messageIdが取得できなかったときヴァリデーションを呼び出す
             String messageIdExistState = checkIfMessageIdExists.check(messageId);
-            if (messageIdExistState != "E_OK") {
+            if (!tokenAndUidExistState.equals("E_OK")) {
                 // messageIdが取得できなかった場合
                 // エラーコードをAndroidに返す
                 writer.write(messageIdExistState);
@@ -82,7 +82,7 @@ public class SendLogic implements HttpFunction {
             // TODO: messageIdと一致するドキュメントを取得できなかった場合のヴァリデーションを呼び出す
             GetCheerMailRepositoryEntity cheerMailDocument = getCheerMailRepository.getCheerMail(messageId);
             String documentExistState = checkIfDocumentExists.check(cheerMailDocument);
-            if (documentExistState != "E_OK") {
+            if (!documentExistState.equals("E_OK")) {
                 // messageIdと一致するドキュメントが取得できなかった場合
                 // エラーコードをAndroidに返す
                 writer.write(documentExistState);
