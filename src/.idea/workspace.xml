@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="03b9f392-38b0-45b4-98ce-c1e9a62091d0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/java/CreateSendRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/main/java/CreateSendRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/java/Repositories/GetCheerMailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/main/java/Repositories/GetCheerMailRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/java/com/sendlogic/sendLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/main/java/com/sendlogic/sendLogic.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1qXwN1IoleqAX7ZUEG9JtPcirPo" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="03b9f392-38b0-45b4-98ce-c1e9a62091d0" name="Default Changelist" comment="" />
+      <created>1617239204119</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617239204119</updated>
+    </task>
+    <servers />
+  </component>
+</project>
