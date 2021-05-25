@@ -38,7 +38,7 @@ public class SendLogic implements HttpFunction {
 
         GetCheerMailRepository getCheerMailRepository = new GetCheerMailRepositoryImpl();
         GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
-        SaveReceiverUidRepositoryImpl saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
+        SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
 
         CheckIfDocumentExists checkIfDocumentExists = new CheckIfDocumentExists();
         CheckIfTokenAndUidExist checkIfTokenAndUidExist = new CheckIfTokenAndUidExist();

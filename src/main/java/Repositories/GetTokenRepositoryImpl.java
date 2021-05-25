@@ -54,9 +54,9 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             uid = document.getString("uid");
         }
 
-        GetTokenRepositoryEntity helper = new GetTokenRepositoryEntity();
-        helper.setToken(token);
-        helper.setUid(uid);
-        return helper;
+        GetTokenRepositoryEntity entity = new GetTokenRepositoryEntity();
+        entity.setToken(token);
+        entity.setUid(uid);
+        return entity;
     }
 }

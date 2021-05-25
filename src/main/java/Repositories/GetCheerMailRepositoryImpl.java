@@ -31,12 +31,12 @@ public class GetCheerMailRepositoryImpl implements GetCheerMailRepository {
             documentId = document.getId();
         }
 
-        GetCheerMailRepositoryEntity helper = new GetCheerMailRepositoryEntity();
-        helper.setMessage(message);
-        helper.setUserName(userName);
-        helper.setDocumentId(documentId);
+        GetCheerMailRepositoryEntity entity = new GetCheerMailRepositoryEntity();
+        entity.setMessage(message);
+        entity.setUserName(userName);
+        entity.setDocumentId(documentId);
 
-        return helper;
+        return entity;
 
     }
 }
