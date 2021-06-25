@@ -4,9 +4,7 @@ import Entities.GetCheerMailRepositoryEntity;
 import Entities.GetTokenRepositoryEntity;
 import Infra.InitializeFirebaseSdk;
 import Repositories.*;
-import UseCases.CheckIfDocumentExists;
-import UseCases.CheckIfMessageIdExists;
-import UseCases.CheckIfTokenAndUidExist;
+import UseCases.Validator;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
@@ -40,17 +38,15 @@ public class SendLogic implements HttpFunction {
         GetTokenRepository getTokenRepository = new GetTokenRepositoryImpl();
         SaveReceiverUidRepository saveReceiverUidRepository = new SaveReceiverUidRepositoryImpl();
 
-        CheckIfDocumentExists checkIfDocumentExists = new CheckIfDocumentExists();
-        CheckIfTokenAndUidExist checkIfTokenAndUidExist = new CheckIfTokenAndUidExist();
-        CheckIfMessageIdExists checkIfMessageIdExists = new CheckIfMessageIdExists();
+        Validator validator = new Validator();
 
 
         // メッセージの送り先(受信者)のuidとtokenを取得
         GetTokenRepositoryEntity tokenAndUid = getTokenRepository.getToken();
         logger.debug("after call getRegistrationTokenRepository");
 
-        // TODO: uidとtokenを取得できなかったときのヴァリデーションを呼び出す
-        String tokenAndUidExistState = checkIfTokenAndUidExist.check(tokenAndUid);
+        // uidとtokenを取得できなかったときのヴァリデーションを呼び出す
+        String tokenAndUidExistState = validator.checkIfTokenAndUidExist(tokenAndUid);
         if (!tokenAndUidExistState.equals("E_OK")) {
             // tokenとuidが取得できなかった場合
             // エラーコードをAndroidに返す
@@ -68,8 +64,8 @@ public class SendLogic implements HttpFunction {
         if (params.containsKey("messageId")) {
             String messageId = params.get("messageId").get(0);
 
-            // TODO: messageIdが取得できなかったときヴァリデーションを呼び出す
-            String messageIdExistState = checkIfMessageIdExists.check(messageId);
+            // messageIdが取得できなかったときヴァリデーションを呼び出す
+            String messageIdExistState = validator.checkIfMessageExists(messageId);
             if (!tokenAndUidExistState.equals("E_OK")) {
                 // messageIdが取得できなかった場合
                 // エラーコードをAndroidに返す
@@ -79,9 +75,9 @@ public class SendLogic implements HttpFunction {
             logger.debug("messageId: " + messageId);
 
 
-            // TODO: messageIdと一致するドキュメントを取得できなかった場合のヴァリデーションを呼び出す
+            // messageIdと一致するドキュメントを取得できなかった場合のヴァリデーションを呼び出す
             GetCheerMailRepositoryEntity cheerMailDocument = getCheerMailRepository.getCheerMail(messageId);
-            String documentExistState = checkIfDocumentExists.check(cheerMailDocument);
+            String documentExistState = validator.checkIfDocumentExists(cheerMailDocument);
             if (!documentExistState.equals("E_OK")) {
                 // messageIdと一致するドキュメントが取得できなかった場合
                 // エラーコードをAndroidに返す

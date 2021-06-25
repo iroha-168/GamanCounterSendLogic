@@ -1,0 +1,30 @@
+com/sendlogic/SendLogic.java
+ com.sendlogic.SendLogic
+ApproveSendRequest.java
+ ApproveSendRequest
+UseCases/CheckIfDocumentExists.java
+ UseCases.CheckIfDocumentExists
+Repositories/SaveReceiverUidRepository.java
+ Repositories.SaveReceiverUidRepository
+Repositories/GetCheerMailRepositoryImpl.java
+ Repositories.GetCheerMailRepositoryImpl
+Repositories/GetTokenRepositoryImpl.java
+ Repositories.GetTokenRepositoryImpl
+Repositories/SaveReceiverUidRepositoryImpl.java
+ Repositories.SaveReceiverUidRepositoryImpl
+UseCases/CheckIfMessageIdExists.java
+ UseCases.CheckIfMessageIdExists
+UseCases/CheckIfTokenAndUidExist.java
+ UseCases.CheckIfTokenAndUidExist
+Infra/InitializeFirebaseSdk.java
+ Infra.InitializeFirebaseSdk
+Repositories/GetCheerMailRepository.java
+ Repositories.GetCheerMailRepository
+Entities/ReturnErrorCodeEntity.java
+ Entities.ReturnErrorCodeEntity
+Repositories/GetTokenRepository.java
+ Repositories.GetTokenRepository
+Entities/GetTokenRepositoryEntity.java
+ Entities.GetTokenRepositoryEntity
+Entities/GetCheerMailRepositoryEntity.java
+ Entities.GetCheerMailRepositoryEntity
