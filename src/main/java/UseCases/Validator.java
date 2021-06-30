@@ -3,6 +3,9 @@ package UseCases;
 import Entities.GetCheerMailRepositoryEntity;
 import Entities.GetTokenRepositoryEntity;
 import Entities.ReturnErrorCodeEntity;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 
 public class Validator {
     public String checkIfTokenAndUidExist(GetTokenRepositoryEntity tokenAndUid) {
@@ -40,6 +43,29 @@ public class Validator {
 
         if (messageAndNameEqualToMassageId == null) {
             // messageIdと一致するドキュメントが存在しなかった場合
+            String errorCode = returnErrorCodeEntity.ReturnErrorCode("cannot find document");
+            return errorCode;
+
+        } else {
+            // messageIdと一致するドキュメントが存在した場合
+            String successCode = returnErrorCodeEntity.ReturnErrorCode("success");
+            return successCode;
+        }
+    }
+
+    public String returnStatus(ApiFuture snapshot) {
+        if (snapshot == null) {
+            // testNotificationコレクションにドキュメントが存在しなかった場合
+            return "failed";
+        }
+        return "success";
+    }
+
+    public String checkIfTestNotificationHasDocuments(String status) {
+        ReturnErrorCodeEntity returnErrorCodeEntity = new ReturnErrorCodeEntity();
+
+        if (status == "failed") {
+            // testNotificationコレクションにドキュメントが存在しなかった場合
             String errorCode = returnErrorCodeEntity.ReturnErrorCode("cannot find document");
             return errorCode;
 

@@ -41,7 +41,8 @@ public class SendLogic implements HttpFunction {
         Validator validator = new Validator();
 
 
-        // メッセージの送り先(受信者)のuidとtokenを取得
+        // ======= メッセージの送り先(受信者)のuidとtokenを取得 ========
+        // TODO: testNotificationにドキュメントがあるか(getMax()が成功か失敗か)をチェック
         GetTokenRepositoryEntity tokenAndUid = getTokenRepository.getToken();
         logger.debug("after call getRegistrationTokenRepository");
 
@@ -59,7 +60,7 @@ public class SendLogic implements HttpFunction {
         logger.debug("uid: " + uid);
 
 
-        // Android側で送られてきたメッセージIDを取得
+        // ======= Android側で送られてきたメッセージIDを取得 =======
         var params = request.getQueryParameters();
         if (params.containsKey("messageId")) {
             String messageId = params.get("messageId").get(0);

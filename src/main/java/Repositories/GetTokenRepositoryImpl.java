@@ -1,6 +1,7 @@
 package Repositories;
 
 import Entities.GetTokenRepositoryEntity;
+import UseCases.Validator;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -19,17 +20,23 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
     }
 
     public Double getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException {
+        // testNotificationコレクションからドキュメントをランダムに一件取得
         Query query_max = testNotification
                 .orderBy("random", Query.Direction.DESCENDING)
                 .limit(1);
         ApiFuture<QuerySnapshot> querySnapshotMax = query_max.get();
 
-        Double max = null;
+        // TODO: querySnapshotMaxのバリデーションチェック
+        Validator validator = new Validator();
+        String status = validator.returnStatus(querySnapshotMax);
 
+        // TODO: statusをSendLogicに返す
+
+
+        Double max = null;
         if (querySnapshotMax.get().getDocuments().iterator().hasNext()) {
             max = querySnapshotMax.get().getDocuments().iterator().next().getDouble("random");
         }
-
         return max;
     }
 
@@ -44,6 +51,8 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
                 .limit(1);
 
         ApiFuture<QuerySnapshot> future = query.get();
+        // TODO: futureのバリデーションチェック
+
         List<QueryDocumentSnapshot> documents = null;
 
         documents = future.get().getDocuments();
