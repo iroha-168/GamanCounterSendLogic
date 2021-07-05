@@ -1,7 +1,7 @@
 package Repositories;
 
-import Entities.GetTokenRepositoryEntity;
-import UseCases.Validator;
+import Entities.ReturnErrorCodeEntity;
+import UseCases.Pair;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -11,61 +11,87 @@ import java.util.concurrent.ExecutionException;
 
 public class GetTokenRepositoryImpl implements GetTokenRepository {
 
-    public GetTokenRepositoryEntity getToken() throws InterruptedException, ExecutionException {
+    public Pair getToken() throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference testNotification = db.collection("testNotification");
 
-        Double max = getMax(testNotification);
-        return getRandomUserToken(testNotification, max);
+        Pair pair = getMax(testNotification);
+        return getRandomUserToken(testNotification, pair);
     }
 
-    public Double getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException {
+    public Pair getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException {
         // testNotificationコレクションからドキュメントをランダムに一件取得
         Query query_max = testNotification
                 .orderBy("random", Query.Direction.DESCENDING)
                 .limit(1);
         ApiFuture<QuerySnapshot> querySnapshotMax = query_max.get();
 
-        // TODO: querySnapshotMaxのバリデーションチェック
-        Validator validator = new Validator();
-        String status = validator.returnStatus(querySnapshotMax);
-
-        // TODO: statusをSendLogicに返す
-
-
+        // querySnapshotMaxのバリデーションチェック
+        // statusをSendLogicに返す
+        String errorCode[] = new String[1];
         Double max = null;
-        if (querySnapshotMax.get().getDocuments().iterator().hasNext()) {
-            max = querySnapshotMax.get().getDocuments().iterator().next().getDouble("random");
+        if (querySnapshotMax == null) {
+            // testNotificationコレクション内にドキュメントがなければ
+            // エラーコードを取得
+            ReturnErrorCodeEntity ec = new ReturnErrorCodeEntity();
+            // errorCode配列にエラーコードを格納する
+            errorCode[0] = ec.ReturnErrorCode("cannot find document");
+
+            max = null;
+
+            return new Pair<String[], Double>(errorCode, max);
+
+        } else {
+            // testNotificationコレクション内にドキュメントがあれば
+            // randomの最大値を取得
+            if (querySnapshotMax.get().getDocuments().iterator().hasNext()) {
+                max = querySnapshotMax.get().getDocuments().iterator().next().getDouble("random");
+            }
+            errorCode[0] = "null";
+
+            return new Pair<String[], Double>(errorCode, max);
         }
-        return max;
     }
 
-    public GetTokenRepositoryEntity getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException {
+    public Pair getRandomUserToken(CollectionReference testNotification, Pair pair) throws InterruptedException, ExecutionException {
 
         String token = null;
         String uid = null;
 
-        Query query = testNotification
-                .whereGreaterThanOrEqualTo("random", Math.random() * max)
-                .orderBy("random", Query.Direction.ASCENDING)
-                .limit(1);
+         // Pair pair からmaxを取り出す
+        if(pair.left == null) {
+            // getMax()でドキュメントがなかった場合
+            // そのままPair<ErrorCode, null>の組み合わせを返す
+            return pair;
+        } else {
+            // TODO: pairからmaxを受け取ってランダムにドキュメントを取得
+            // FIXME: 取得できない
+            Object max = (Double) pair.right;
 
-        ApiFuture<QuerySnapshot> future = query.get();
-        // TODO: futureのバリデーションチェック
+            Query query = testNotification
+                    .whereGreaterThanOrEqualTo("random", Math.random() * (Double) max)
+                    .orderBy("random", Query.Direction.ASCENDING)
+                    .limit(1);
 
-        List<QueryDocumentSnapshot> documents = null;
+            ApiFuture<QuerySnapshot> future = query.get();
 
-        documents = future.get().getDocuments();
+            List<QueryDocumentSnapshot> documents = null;
 
-        if (documents.iterator().hasNext()) {
-            var document = documents.iterator().next();
-            token = document.getString("token");
-            uid = document.getString("uid");
+            documents = future.get().getDocuments();
+
+            if (documents.iterator().hasNext()) {
+                var document = documents.iterator().next();
+                token = document.getString("token");
+                uid = document.getString("uid");
+            }
+
+            // TODO: Pair pairのString[]にtokenとuidを入れる
+            String tokenAndUid[] = new String[2];
+            tokenAndUid[0] = token;
+            tokenAndUid[1] = uid;
+
+            // tokenとuidが入ったStringの配列とmaxを返す
+            return new Pair<String[], Double>(tokenAndUid, max);
         }
-
-        GetTokenRepositoryEntity entity = new GetTokenRepositoryEntity();
-        entity.setToken(token);
-        entity.setUid(uid);
-        return entity;
     }
 }

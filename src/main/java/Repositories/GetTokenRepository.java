@@ -1,6 +1,7 @@
 package Repositories;
 
 import Entities.GetTokenRepositoryEntity;
+import UseCases.Pair;
 import com.google.cloud.firestore.CollectionReference;
 
 import java.util.concurrent.ExecutionException;
@@ -13,17 +14,17 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    GetTokenRepositoryEntity getToken() throws InterruptedException, ExecutionException;
+    Pair getToken() throws InterruptedException, ExecutionException;
 
     /**
      * getMax()は、randomの最大値を取得するためのメソッドです
      *
      * @param testNotification: testNotificationコレクションのリファレンス
-     * @return randomフィールドの最大値
+     * @return 成功したかどうかの判定基準
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    Double getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException;
+    Pair getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException;
 
     /**
      * getMax()で取得してきたmaxを利用してドキュメントをランダムで取得するメソッド
@@ -34,5 +35,5 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    GetTokenRepositoryEntity getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException;
+    Pair getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException;
 }

@@ -4,6 +4,7 @@ import Entities.GetCheerMailRepositoryEntity;
 import Entities.GetTokenRepositoryEntity;
 import Infra.InitializeFirebaseSdk;
 import Repositories.*;
+import UseCases.Pair;
 import UseCases.Validator;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
@@ -43,7 +44,8 @@ public class SendLogic implements HttpFunction {
 
         // ======= メッセージの送り先(受信者)のuidとtokenを取得 ========
         // TODO: testNotificationにドキュメントがあるか(getMax()が成功か失敗か)をチェック
-        GetTokenRepositoryEntity tokenAndUid = getTokenRepository.getToken();
+        // TODO: Pairの左側の値がnullの場合エラーコードをAndroidに返却
+        Pair tokenAndUid = getTokenRepository.getToken();
         logger.debug("after call getRegistrationTokenRepository");
 
         // uidとtokenを取得できなかったときのヴァリデーションを呼び出す
@@ -54,6 +56,7 @@ public class SendLogic implements HttpFunction {
             writer.write(tokenAndUidExistState);
             return;
         }
+        // TODO: Pairからtokenとuidを取得
         token = tokenAndUid.getToken();
         uid = tokenAndUid.getUid();
         logger.debug("token: " + token);
