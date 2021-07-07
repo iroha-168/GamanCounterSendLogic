@@ -6,6 +6,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -28,18 +29,18 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
 
         // querySnapshotMaxのバリデーションチェック
         // statusをSendLogicに返す
-        String errorCode[] = new String[1];
         Double max = null;
+        ArrayList<String> errorCode = new ArrayList<>();
         if (querySnapshotMax == null) {
             // testNotificationコレクション内にドキュメントがなければ
             // エラーコードを取得
             ReturnErrorCodeEntity ec = new ReturnErrorCodeEntity();
             // errorCode配列にエラーコードを格納する
-            errorCode[0] = ec.ReturnErrorCode("cannot find document");
+            errorCode.add(ec.ReturnErrorCode("cannot find document"));
 
             max = null;
 
-            return new Pair<String[], Double>(errorCode, max);
+            return new Pair(errorCode, max); // ドキュメントなし　max == null
 
         } else {
             // testNotificationコレクション内にドキュメントがあれば
@@ -47,9 +48,9 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             if (querySnapshotMax.get().getDocuments().iterator().hasNext()) {
                 max = querySnapshotMax.get().getDocuments().iterator().next().getDouble("random");
             }
-            errorCode[0] = "null";
+            errorCode.add("null");
 
-            return new Pair<String[], Double>(errorCode, max);
+            return new Pair(errorCode, max); // ドキュメントあり　max != null
         }
     }
 
@@ -59,14 +60,14 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         String uid = null;
 
          // Pair pair からmaxを取り出す
-        if(pair.left == null) {
+        if(pair.right == null) {
             // getMax()でドキュメントがなかった場合
             // そのままPair<ErrorCode, null>の組み合わせを返す
             return pair;
         } else {
             // TODO: pairからmaxを受け取ってランダムにドキュメントを取得
-            // FIXME: 取得できない
-            Object max = (Double) pair.right;
+            // FIXME: Objectになってしまう
+            ArrayList<String> max = pair.right;
 
             Query query = testNotification
                     .whereGreaterThanOrEqualTo("random", Math.random() * (Double) max)
@@ -91,7 +92,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             tokenAndUid[1] = uid;
 
             // tokenとuidが入ったStringの配列とmaxを返す
-            return new Pair<String[], Double>(tokenAndUid, max);
+            return new Pair<String[], String>(tokenAndUid, "has document");
         }
     }
 }

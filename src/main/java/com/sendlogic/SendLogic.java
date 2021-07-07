@@ -2,6 +2,7 @@ package com.sendlogic;
 
 import Entities.GetCheerMailRepositoryEntity;
 import Entities.GetTokenRepositoryEntity;
+import Entities.ReturnErrorCodeEntity;
 import Infra.InitializeFirebaseSdk;
 import Repositories.*;
 import UseCases.Pair;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
+import java.lang.reflect.Array;
 
 public class SendLogic implements HttpFunction {
 
@@ -43,12 +45,17 @@ public class SendLogic implements HttpFunction {
 
 
         // ======= メッセージの送り先(受信者)のuidとtokenを取得 ========
-        // TODO: testNotificationにドキュメントがあるか(getMax()が成功か失敗か)をチェック
-        // TODO: Pairの左側の値がnullの場合エラーコードをAndroidに返却
         Pair tokenAndUid = getTokenRepository.getToken();
         logger.debug("after call getRegistrationTokenRepository");
 
-        // uidとtokenを取得できなかったときのヴァリデーションを呼び出す
+        // testNotificationにドキュメントがなかった時
+        if (tokenAndUid.right == null) {
+            ReturnErrorCodeEntity ec = new ReturnErrorCodeEntity();
+            String errorCode = ec.ReturnErrorCode("cannot find document");
+            writer.write(errorCode);
+        }
+
+        // uidとtokenを取得できなかった時
         String tokenAndUidExistState = validator.checkIfTokenAndUidExist(tokenAndUid);
         if (!tokenAndUidExistState.equals("E_OK")) {
             // tokenとuidが取得できなかった場合
@@ -56,6 +63,7 @@ public class SendLogic implements HttpFunction {
             writer.write(tokenAndUidExistState);
             return;
         }
+
         // TODO: Pairからtokenとuidを取得
         token = tokenAndUid.getToken();
         uid = tokenAndUid.getUid();

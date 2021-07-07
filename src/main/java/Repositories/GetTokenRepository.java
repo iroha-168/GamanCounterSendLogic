@@ -35,5 +35,5 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    Pair getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException;
+    Pair getRandomUserToken(CollectionReference testNotification, Pair max) throws InterruptedException, ExecutionException;
 }
