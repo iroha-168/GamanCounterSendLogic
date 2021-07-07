@@ -1,17 +1,14 @@
 package UseCases;
 
 import Entities.GetCheerMailRepositoryEntity;
-import Entities.GetTokenRepositoryEntity;
 import Entities.ReturnErrorCodeEntity;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
 
 public class Validator {
     public String checkIfTokenAndUidExist(Pair tokenAndUid) {
         ReturnErrorCodeEntity returnErrorCodeEntity = new ReturnErrorCodeEntity();
+        Object arr = tokenAndUid.left;
 
-        if (tokenAndUid == null) {
+        if (arr == null) {
             // tokenとuidが取得できなかった場合
             String errorCode = returnErrorCodeEntity.ReturnErrorCode("cannot get token and uid");
             return errorCode;

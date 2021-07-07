@@ -30,17 +30,15 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         // querySnapshotMaxのバリデーションチェック
         // statusをSendLogicに返す
         Double max = null;
-        ArrayList<String> errorCode = new ArrayList<>();
         if (querySnapshotMax == null) {
             // testNotificationコレクション内にドキュメントがなければ
             // エラーコードを取得
             ReturnErrorCodeEntity ec = new ReturnErrorCodeEntity();
-            // errorCode配列にエラーコードを格納する
-            errorCode.add(ec.ReturnErrorCode("cannot find document"));
+            String errorCode = ec.ReturnErrorCode("cannot find document");
 
             max = null;
 
-            return new Pair(errorCode, max); // ドキュメントなし　max == null
+            return new Pair(errorCode, max); // ドキュメントなし　Pair(errorCode, null)
 
         } else {
             // testNotificationコレクション内にドキュメントがあれば
@@ -48,9 +46,9 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             if (querySnapshotMax.get().getDocuments().iterator().hasNext()) {
                 max = querySnapshotMax.get().getDocuments().iterator().next().getDouble("random");
             }
-            errorCode.add("null");
+            String errorCode = "null";
 
-            return new Pair(errorCode, max); // ドキュメントあり　max != null
+            return new Pair(errorCode, max); // ドキュメントあり　Pair("null", max)
         }
     }
 
@@ -62,12 +60,12 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
          // Pair pair からmaxを取り出す
         if(pair.right == null) {
             // getMax()でドキュメントがなかった場合
-            // そのままPair<ErrorCode, null>の組み合わせを返す
-            return pair;
+            return pair; // Pair(errorCode, null)
+
         } else {
             // TODO: pairからmaxを受け取ってランダムにドキュメントを取得
             // FIXME: Objectになってしまう
-            ArrayList<String> max = pair.right;
+            Object max = pair.right;
 
             Query query = testNotification
                     .whereGreaterThanOrEqualTo("random", Math.random() * (Double) max)
@@ -86,13 +84,13 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
                 uid = document.getString("uid");
             }
 
-            // TODO: Pair pairのString[]にtokenとuidを入れる
-            String tokenAndUid[] = new String[2];
-            tokenAndUid[0] = token;
-            tokenAndUid[1] = uid;
+            // Pair pairのString[]にtokenとuidを入れる
+            ArrayList<String> tokenAndUid = new ArrayList<>();
+            tokenAndUid.add(token);
+            tokenAndUid.add(uid);
 
             // tokenとuidが入ったStringの配列とmaxを返す
-            return new Pair<String[], String>(tokenAndUid, "has document");
+            return new Pair(tokenAndUid, "has document");
         }
     }
 }

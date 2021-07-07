@@ -1,8 +1,6 @@
 package com.sendlogic;
 
 import Entities.GetCheerMailRepositoryEntity;
-import Entities.GetTokenRepositoryEntity;
-import Entities.ReturnErrorCodeEntity;
 import Infra.InitializeFirebaseSdk;
 import Repositories.*;
 import UseCases.Pair;
@@ -17,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class SendLogic implements HttpFunction {
 
@@ -49,10 +47,11 @@ public class SendLogic implements HttpFunction {
         logger.debug("after call getRegistrationTokenRepository");
 
         // testNotificationにドキュメントがなかった時
+        // Pair(errorCode, null)
         if (tokenAndUid.right == null) {
-            ReturnErrorCodeEntity ec = new ReturnErrorCodeEntity();
-            String errorCode = ec.ReturnErrorCode("cannot find document");
-            writer.write(errorCode);
+            Object errorCode = tokenAndUid.left;
+            writer.write((String) errorCode);
+            return;
         }
 
         // uidとtokenを取得できなかった時
@@ -64,9 +63,11 @@ public class SendLogic implements HttpFunction {
             return;
         }
 
-        // TODO: Pairからtokenとuidを取得
-        token = tokenAndUid.getToken();
-        uid = tokenAndUid.getUid();
+        // Pairからtokenとuidを取得
+        Object obj = tokenAndUid.left;
+        ArrayList<String> arr = (ArrayList<String>) obj;
+        token = arr.get(0);
+        uid = arr.get(1);
         logger.debug("token: " + token);
         logger.debug("uid: " + uid);
 
