@@ -72,10 +72,8 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
                     .limit(1);
 
             ApiFuture<QuerySnapshot> future = query.get();
-
-            List<QueryDocumentSnapshot> documents = null;
-
-            documents = future.get().getDocuments();
+            
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
             if (documents.iterator().hasNext()) {
                 var document = documents.iterator().next();
