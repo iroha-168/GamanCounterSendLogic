@@ -20,7 +20,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
         return getRandomUserToken(testNotification, pair);
     }
 
-    public Pair getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException {
+    public Pair<String, Double> getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException {
         // testNotificationコレクションからドキュメントをランダムに一件取得
         Query query_max = testNotification
                 .orderBy("random", Query.Direction.DESCENDING)
@@ -38,7 +38,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
 
             max = null;
 
-            return new Pair(errorCode, max); // ドキュメントなし　Pair(errorCode, null)
+            return new Pair<String, Double>(errorCode, max); // ドキュメントなし　Pair(errorCode, null)
 
         } else {
             // testNotificationコレクション内にドキュメントがあれば
@@ -48,11 +48,11 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             }
             String errorCode = "null";
 
-            return new Pair(errorCode, max); // ドキュメントあり　Pair("null", max)
+            return new Pair<String, Double>(errorCode, max); // ドキュメントあり　Pair("null", max)
         }
     }
 
-    public Pair getRandomUserToken(CollectionReference testNotification, Pair pair) throws InterruptedException, ExecutionException {
+    public Pair<ArrayList<String>, String> getRandomUserToken(CollectionReference testNotification, Pair pair) throws InterruptedException, ExecutionException {
 
         String token = null;
         String uid = null;
@@ -63,8 +63,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             return pair; // Pair(errorCode, null)
 
         } else {
-            // TODO: pairからmaxを受け取ってランダムにドキュメントを取得
-            // FIXME: Objectになってしまう
+            // pairからmaxを受け取ってランダムにドキュメントを取得
             Object max = pair.right;
 
             Query query = testNotification
@@ -90,7 +89,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
             tokenAndUid.add(uid);
 
             // tokenとuidが入ったStringの配列とmaxを返す
-            return new Pair(tokenAndUid, "has document");
+            return new Pair<ArrayList<String>, String>(tokenAndUid, "has document");
         }
     }
 }
