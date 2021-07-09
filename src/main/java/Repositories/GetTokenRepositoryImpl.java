@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GetTokenRepositoryImpl implements GetTokenRepository {
 
-    public Pair getToken() throws InterruptedException, ExecutionException {
+    public Pair<ArrayList<String>, String> getToken() throws InterruptedException, ExecutionException {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference testNotification = db.collection("testNotification");
 
@@ -72,7 +72,7 @@ public class GetTokenRepositoryImpl implements GetTokenRepository {
                     .limit(1);
 
             ApiFuture<QuerySnapshot> future = query.get();
-            
+
             List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
             if (documents.iterator().hasNext()) {
