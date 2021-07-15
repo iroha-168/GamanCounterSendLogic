@@ -1,6 +1,7 @@
 package com.sendlogic;
 
 import Entities.GetCheerMailRepositoryEntity;
+import Entities.ReturnErrorCodeEntity;
 import Infra.InitializeFirebaseSdk;
 import Repositories.*;
 import UseCases.Pair;
@@ -43,31 +44,22 @@ public class SendLogic implements HttpFunction {
 
 
         // ======= メッセージの送り先(受信者)のuidとtokenを取得 ========
-        Pair tokenAndUid = getTokenRepository.getToken();
+        Pair<ArrayList<String>, Boolean> pair = getTokenRepository.getToken();
         logger.debug("after call getRegistrationTokenRepository");
 
-        // testNotificationにドキュメントがなかった時
-        // Pair(errorCode, null)
-        if (tokenAndUid.right == null) {
-            Object errorCode = tokenAndUid.left;
-            writer.write((String) errorCode);
+        // TODO: testNotificationにドキュメントがなかった場合
+        // TODO: エラーコードを取得してAndroidに返却して終了
+        if (pair.right == false) {
+            ReturnErrorCodeEntity ec = new ReturnErrorCodeEntity();
+            String errorCode = ec.ReturnErrorCode("cannot find document");
+            writer.write(errorCode);
             return;
         }
 
-        // uidとtokenを取得できなかった時
-        String tokenAndUidExistState = validator.checkIfTokenAndUidExist(tokenAndUid);
-        if (!tokenAndUidExistState.equals("E_OK")) {
-            // tokenとuidが取得できなかった場合
-            // エラーコードをAndroidに返す
-            writer.write(tokenAndUidExistState);
-            return;
-        }
-
-        // Pairからtokenとuidを取得
-        Object obj = tokenAndUid.left;
-        ArrayList<String> arr = (ArrayList<String>) obj;
-        token = arr.get(0);
-        uid = arr.get(1);
+        //　TODO: testNotificationにドキュメントが存在した場合
+        ArrayList<String> tokenAndUid = pair.left;
+        token = tokenAndUid.get(0);
+        uid = tokenAndUid.get(1);
         logger.debug("token: " + token);
         logger.debug("uid: " + uid);
 
@@ -79,7 +71,7 @@ public class SendLogic implements HttpFunction {
 
             // messageIdが取得できなかったときヴァリデーションを呼び出す
             String messageIdExistState = validator.checkIfMessageExists(messageId);
-            if (!tokenAndUidExistState.equals("E_OK")) {
+            if (!messageIdExistState.equals("E_OK")) {
                 // messageIdが取得できなかった場合
                 // エラーコードをAndroidに返す
                 writer.write(messageIdExistState);
@@ -87,8 +79,7 @@ public class SendLogic implements HttpFunction {
             }
             logger.debug("messageId: " + messageId);
 
-
-            // messageIdと一致するドキュメントを取得できなかった場合のヴァリデーションを呼び出す
+            // messageIdと一致するドキュメントをFirestoreから取得できなかった場合のヴァリデーションを呼び出す
             GetCheerMailRepositoryEntity cheerMailDocument = getCheerMailRepository.getCheerMail(messageId);
             String documentExistState = validator.checkIfDocumentExists(cheerMailDocument);
             if (!documentExistState.equals("E_OK")) {

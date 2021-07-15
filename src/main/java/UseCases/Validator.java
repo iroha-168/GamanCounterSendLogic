@@ -4,21 +4,6 @@ import Entities.GetCheerMailRepositoryEntity;
 import Entities.ReturnErrorCodeEntity;
 
 public class Validator {
-    public String checkIfTokenAndUidExist(Pair tokenAndUid) {
-        ReturnErrorCodeEntity returnErrorCodeEntity = new ReturnErrorCodeEntity();
-        Object arr = tokenAndUid.left;
-
-        if (arr == null) {
-            // tokenとuidが取得できなかった場合
-            String errorCode = returnErrorCodeEntity.ReturnErrorCode("cannot get token and uid");
-            return errorCode;
-
-        } else {
-            // tokenとuidが取得できた場合
-            String successCode = returnErrorCodeEntity.ReturnErrorCode("success");
-            return successCode;
-        }
-    }
 
     public String checkIfMessageExists(String messageId) {
         ReturnErrorCodeEntity returnErrorCodeEntity = new ReturnErrorCodeEntity();

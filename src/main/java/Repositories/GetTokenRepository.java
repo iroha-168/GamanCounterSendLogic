@@ -14,7 +14,7 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    Pair<ArrayList<String>, String> getToken() throws InterruptedException, ExecutionException;
+    Pair<ArrayList<String>, Boolean> getToken() throws InterruptedException, ExecutionException;
 
     /**
      * getMax()は、randomの最大値を取得するためのメソッドです
@@ -24,7 +24,7 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    Pair<String, Double> getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException;
+    Double getMax(CollectionReference testNotification) throws InterruptedException, ExecutionException;
 
     /**
      * getMax()で取得してきたmaxを利用してドキュメントをランダムで取得するメソッド
@@ -35,5 +35,5 @@ public interface GetTokenRepository {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    Pair<ArrayList<String>, String> getRandomUserToken(CollectionReference testNotification, Pair max) throws InterruptedException, ExecutionException;
+    Pair<ArrayList<String>, Boolean> getRandomUserToken(CollectionReference testNotification, Double max) throws InterruptedException, ExecutionException;
 }
